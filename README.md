@@ -1,5 +1,7 @@
 Чтобы запустить проект вводим в командную строку docker-compose up --build
+
 Генерируем JWT Token по ссылке http://localhost:8080/realms/agsr/protocol/openid-connect/token
+
 ![Screenshot_15](https://github.com/koop9087/rest-oauth2-service2/assets/77532145/5d4d4f81-7ea2-4a1f-a3ad-af0632b8c228)
 
 
