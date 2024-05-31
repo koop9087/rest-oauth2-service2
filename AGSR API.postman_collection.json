@@ -1,0 +1,375 @@
+{
+	"info": {
+		"_postman_id": "e03b4bff-d9dc-4f39-9dfe-274f272a1f15",
+		"name": "AGSR API",
+		"description": "Для использования следует идти по шагам. Существует разделение по ролям.\n\n1)Роль Практикант - креды :  \nusername - ivanovAndrey  \npassword - ivanov\n\nПример заполнения кредов :\n\n<img src=\"https://content.pstmn.io/a429965f-5937-46f5-8c97-13023951f93a/aW1hZ2UucG5n\" width=\"1368\" height=\"465\">\n\n2)Роль Пациент - креды :  \nusername - petrovSemen  \npassword - petrov\n\nЗаполнение кредов выглядит следующим образом :\n\n<img src=\"https://content.pstmn.io/a9d59c5e-a663-4131-b888-259e0b3414e7/aW1hZ2UucG5n\" width=\"1370\" height=\"455\">\n\n3)Также есть пользователь с двумя ролями, и Пациент, и Практикант - креды :  \nusername - sidorovIvan  \npassword - sidorov\n\nПример заполнения :\n\n<img src=\"https://content.pstmn.io/9ad45062-eb12-431a-bf8c-8de686785d8d/aW1hZ2UucG5n\" width=\"1373\" height=\"507\">\n\nДалее, в зависимости от роли и пользователя, следует переходить по шагам, указанных в названии, ВАЖНО!!!! добавить полученный access token на 2 шаг в раздел Autentification - Bearer\n\nПример :\n\n<img src=\"https://content.pstmn.io/f8d1b4e0-eaec-4b99-ad05-8f183943ba59/aW1hZ2UucG5n\" width=\"1374\" height=\"608\">\n\nК сожалению, время было ограничено, я решил не делать переменные в этой среде, поэтому каждый новый энпоинт вставляем токен аналогичным образом и тестируем эндпоинты. Если токен уже вшит в постман в каждом эндпоинте, ЗАМЕНИТЬ!!! Иначе будет 401 ошибка (не авторизирован). Срок действия токена 300 секунд.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33335058"
+	},
+	"item": [
+		{
+			"name": "1 шаг. Получение токена",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "customsecurity",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "ivanovAndrey",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "ivanov",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "2Cn1N6P9I7r2a4dV6f8h0J3l5n7Q9r2t",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/realms/agsr/protocol/openid-connect/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"realms",
+						"agsr",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				},
+				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+			},
+			"response": []
+		},
+		{
+			"name": "2 шаг. Получение данных о пациентах",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJPaDBibTBDcHUtSXU4LWdPZ3NfQmtINkhyWHR2aHFRdy1fbW55TFZ2dmtrIn0.eyJleHAiOjE3MTcxOTc1MTEsImlhdCI6MTcxNzE5NzIxMSwianRpIjoiZmRhZjc2MDQtMmQ5YS00NTExLWI0ZTMtOTdlMzk3ZTljMTE1IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9hZ3NyIiwic3ViIjoiMGU3MjI3YTctNTQ3Yy00YTFhLTg5OWYtNTgyNTI1MTA5MDk1IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiY3VzdG9tc2VjdXJpdHkiLCJzZXNzaW9uX3N0YXRlIjoiN2M1NTliMzMtYzVjZC00MGRmLTlhOTgtZDQ0YmU2MTlmMGRkIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJST0xFX1BSQUNUSVRJT05FUiJdfSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiN2M1NTliMzMtYzVjZC00MGRmLTlhOTgtZDQ0YmU2MTlmMGRkIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5hbWUiOiJBbmRyZXkgSXZhbm92IiwicHJlZmVycmVkX3VzZXJuYW1lIjoiaXZhbm92YW5kcmV5IiwiZ2l2ZW5fbmFtZSI6IkFuZHJleSIsImZhbWlseV9uYW1lIjoiSXZhbm92IiwiZW1haWwiOiJpdmFub3ZAbWFpbC5jb20ifQ.wOrWw0pn0qZc2ao7pxwJrunz8tJ0AO6FTRfKk8uKBWpfarfqp4SF1uJaj45FExwFAl6RdpbA5YG6G8zn-iGTpcnyHsZ7wsSEHUaQyn9ln83svdvr0xXFsYdzRq0Upuh1HnXnUnIQW6Kc4c9uKUCs_CGhM4Z0ciE_5g1YAiOZ5pTgwCE62-sifpsIMh-6f4iDRoYtUjOzaGKTm6nxIPjCgeHM21qf6XzU00MsTi_X4yNI0HuCSnu3Hq-aAVgCct8cns-v5hIVUmSnoWmWw0rTdsXGQTUbJvrUem5q1c11y-gIsa9rt54oRwooCYmLzTesuCDrB2jJsbOu4NLD3i1OKA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/agsr/api/patients",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"agsr",
+						"api",
+						"patients"
+					]
+				},
+				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "3 шаг. Сохранение пациента",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful PUT request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJPaDBibTBDcHUtSXU4LWdPZ3NfQmtINkhyWHR2aHFRdy1fbW55TFZ2dmtrIn0.eyJleHAiOjE3MTcxOTc1MTEsImlhdCI6MTcxNzE5NzIxMSwianRpIjoiZmRhZjc2MDQtMmQ5YS00NTExLWI0ZTMtOTdlMzk3ZTljMTE1IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9hZ3NyIiwic3ViIjoiMGU3MjI3YTctNTQ3Yy00YTFhLTg5OWYtNTgyNTI1MTA5MDk1IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiY3VzdG9tc2VjdXJpdHkiLCJzZXNzaW9uX3N0YXRlIjoiN2M1NTliMzMtYzVjZC00MGRmLTlhOTgtZDQ0YmU2MTlmMGRkIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJST0xFX1BSQUNUSVRJT05FUiJdfSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiN2M1NTliMzMtYzVjZC00MGRmLTlhOTgtZDQ0YmU2MTlmMGRkIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5hbWUiOiJBbmRyZXkgSXZhbm92IiwicHJlZmVycmVkX3VzZXJuYW1lIjoiaXZhbm92YW5kcmV5IiwiZ2l2ZW5fbmFtZSI6IkFuZHJleSIsImZhbWlseV9uYW1lIjoiSXZhbm92IiwiZW1haWwiOiJpdmFub3ZAbWFpbC5jb20ifQ.wOrWw0pn0qZc2ao7pxwJrunz8tJ0AO6FTRfKk8uKBWpfarfqp4SF1uJaj45FExwFAl6RdpbA5YG6G8zn-iGTpcnyHsZ7wsSEHUaQyn9ln83svdvr0xXFsYdzRq0Upuh1HnXnUnIQW6Kc4c9uKUCs_CGhM4Z0ciE_5g1YAiOZ5pTgwCE62-sifpsIMh-6f4iDRoYtUjOzaGKTm6nxIPjCgeHM21qf6XzU00MsTi_X4yNI0HuCSnu3Hq-aAVgCct8cns-v5hIVUmSnoWmWw0rTdsXGQTUbJvrUem5q1c11y-gIsa9rt54oRwooCYmLzTesuCDrB2jJsbOu4NLD3i1OKA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"123\",\n    \"name\": \"Петров Петр Петрович\",\n    \"gender\": \"male\",\n    \"birthDate\": \"2024-05-29T19:25:43.000+00:00\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/agsr/api/patients",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"agsr",
+						"api",
+						"patients"
+					]
+				},
+				"description": "This is a PUT request and it is used to overwrite an existing piece of data. For instance, after you create an entity with a POST request, you may want to modify that later. You can do that using a PUT request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful PUT request typically returns a `200 OK`, `201 Created`, or `204 No Content` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "4 шаг. Обновление пациента",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful DELETE request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 202, 204]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJPaDBibTBDcHUtSXU4LWdPZ3NfQmtINkhyWHR2aHFRdy1fbW55TFZ2dmtrIn0.eyJleHAiOjE3MTcxOTc1MTEsImlhdCI6MTcxNzE5NzIxMSwianRpIjoiZmRhZjc2MDQtMmQ5YS00NTExLWI0ZTMtOTdlMzk3ZTljMTE1IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9hZ3NyIiwic3ViIjoiMGU3MjI3YTctNTQ3Yy00YTFhLTg5OWYtNTgyNTI1MTA5MDk1IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiY3VzdG9tc2VjdXJpdHkiLCJzZXNzaW9uX3N0YXRlIjoiN2M1NTliMzMtYzVjZC00MGRmLTlhOTgtZDQ0YmU2MTlmMGRkIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJST0xFX1BSQUNUSVRJT05FUiJdfSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiN2M1NTliMzMtYzVjZC00MGRmLTlhOTgtZDQ0YmU2MTlmMGRkIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5hbWUiOiJBbmRyZXkgSXZhbm92IiwicHJlZmVycmVkX3VzZXJuYW1lIjoiaXZhbm92YW5kcmV5IiwiZ2l2ZW5fbmFtZSI6IkFuZHJleSIsImZhbWlseV9uYW1lIjoiSXZhbm92IiwiZW1haWwiOiJpdmFub3ZAbWFpbC5jb20ifQ.wOrWw0pn0qZc2ao7pxwJrunz8tJ0AO6FTRfKk8uKBWpfarfqp4SF1uJaj45FExwFAl6RdpbA5YG6G8zn-iGTpcnyHsZ7wsSEHUaQyn9ln83svdvr0xXFsYdzRq0Upuh1HnXnUnIQW6Kc4c9uKUCs_CGhM4Z0ciE_5g1YAiOZ5pTgwCE62-sifpsIMh-6f4iDRoYtUjOzaGKTm6nxIPjCgeHM21qf6XzU00MsTi_X4yNI0HuCSnu3Hq-aAVgCct8cns-v5hIVUmSnoWmWw0rTdsXGQTUbJvrUem5q1c11y-gIsa9rt54oRwooCYmLzTesuCDrB2jJsbOu4NLD3i1OKA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\" : \"3\",\r\n    \"name\": \"Тестов Тест Тестович\",\r\n    \"gender\": \"male\",\r\n    \"birthDate\": \"2024-05-29T19:26:43\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/agsr/api/patients/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"agsr",
+						"api",
+						"patients",
+						"1"
+					]
+				},
+				"description": "This is a DELETE request, and it is used to delete data that was previously created via a POST request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful DELETE request typically returns a `200 OK`, `202 Accepted`, or `204 No Content` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "5 шаг. Просмотр обновленного пациента",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJPaDBibTBDcHUtSXU4LWdPZ3NfQmtINkhyWHR2aHFRdy1fbW55TFZ2dmtrIn0.eyJleHAiOjE3MTcxOTc1MTEsImlhdCI6MTcxNzE5NzIxMSwianRpIjoiZmRhZjc2MDQtMmQ5YS00NTExLWI0ZTMtOTdlMzk3ZTljMTE1IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9hZ3NyIiwic3ViIjoiMGU3MjI3YTctNTQ3Yy00YTFhLTg5OWYtNTgyNTI1MTA5MDk1IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiY3VzdG9tc2VjdXJpdHkiLCJzZXNzaW9uX3N0YXRlIjoiN2M1NTliMzMtYzVjZC00MGRmLTlhOTgtZDQ0YmU2MTlmMGRkIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJST0xFX1BSQUNUSVRJT05FUiJdfSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiN2M1NTliMzMtYzVjZC00MGRmLTlhOTgtZDQ0YmU2MTlmMGRkIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5hbWUiOiJBbmRyZXkgSXZhbm92IiwicHJlZmVycmVkX3VzZXJuYW1lIjoiaXZhbm92YW5kcmV5IiwiZ2l2ZW5fbmFtZSI6IkFuZHJleSIsImZhbWlseV9uYW1lIjoiSXZhbm92IiwiZW1haWwiOiJpdmFub3ZAbWFpbC5jb20ifQ.wOrWw0pn0qZc2ao7pxwJrunz8tJ0AO6FTRfKk8uKBWpfarfqp4SF1uJaj45FExwFAl6RdpbA5YG6G8zn-iGTpcnyHsZ7wsSEHUaQyn9ln83svdvr0xXFsYdzRq0Upuh1HnXnUnIQW6Kc4c9uKUCs_CGhM4Z0ciE_5g1YAiOZ5pTgwCE62-sifpsIMh-6f4iDRoYtUjOzaGKTm6nxIPjCgeHM21qf6XzU00MsTi_X4yNI0HuCSnu3Hq-aAVgCct8cns-v5hIVUmSnoWmWw0rTdsXGQTUbJvrUem5q1c11y-gIsa9rt54oRwooCYmLzTesuCDrB2jJsbOu4NLD3i1OKA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/agsr/api/patients",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"agsr",
+						"api",
+						"patients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6 шаг. Удаление пациента",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJPaDBibTBDcHUtSXU4LWdPZ3NfQmtINkhyWHR2aHFRdy1fbW55TFZ2dmtrIn0.eyJleHAiOjE3MTcxOTc1MTEsImlhdCI6MTcxNzE5NzIxMSwianRpIjoiZmRhZjc2MDQtMmQ5YS00NTExLWI0ZTMtOTdlMzk3ZTljMTE1IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9hZ3NyIiwic3ViIjoiMGU3MjI3YTctNTQ3Yy00YTFhLTg5OWYtNTgyNTI1MTA5MDk1IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiY3VzdG9tc2VjdXJpdHkiLCJzZXNzaW9uX3N0YXRlIjoiN2M1NTliMzMtYzVjZC00MGRmLTlhOTgtZDQ0YmU2MTlmMGRkIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJST0xFX1BSQUNUSVRJT05FUiJdfSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiN2M1NTliMzMtYzVjZC00MGRmLTlhOTgtZDQ0YmU2MTlmMGRkIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5hbWUiOiJBbmRyZXkgSXZhbm92IiwicHJlZmVycmVkX3VzZXJuYW1lIjoiaXZhbm92YW5kcmV5IiwiZ2l2ZW5fbmFtZSI6IkFuZHJleSIsImZhbWlseV9uYW1lIjoiSXZhbm92IiwiZW1haWwiOiJpdmFub3ZAbWFpbC5jb20ifQ.wOrWw0pn0qZc2ao7pxwJrunz8tJ0AO6FTRfKk8uKBWpfarfqp4SF1uJaj45FExwFAl6RdpbA5YG6G8zn-iGTpcnyHsZ7wsSEHUaQyn9ln83svdvr0xXFsYdzRq0Upuh1HnXnUnIQW6Kc4c9uKUCs_CGhM4Z0ciE_5g1YAiOZ5pTgwCE62-sifpsIMh-6f4iDRoYtUjOzaGKTm6nxIPjCgeHM21qf6XzU00MsTi_X4yNI0HuCSnu3Hq-aAVgCct8cns-v5hIVUmSnoWmWw0rTdsXGQTUbJvrUem5q1c11y-gIsa9rt54oRwooCYmLzTesuCDrB2jJsbOu4NLD3i1OKA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/agsr/api/patients/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"agsr",
+						"api",
+						"patients",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7 шаг. Просмотр обновленной информации",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJPaDBibTBDcHUtSXU4LWdPZ3NfQmtINkhyWHR2aHFRdy1fbW55TFZ2dmtrIn0.eyJleHAiOjE3MTcxOTc1MTEsImlhdCI6MTcxNzE5NzIxMSwianRpIjoiZmRhZjc2MDQtMmQ5YS00NTExLWI0ZTMtOTdlMzk3ZTljMTE1IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9hZ3NyIiwic3ViIjoiMGU3MjI3YTctNTQ3Yy00YTFhLTg5OWYtNTgyNTI1MTA5MDk1IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiY3VzdG9tc2VjdXJpdHkiLCJzZXNzaW9uX3N0YXRlIjoiN2M1NTliMzMtYzVjZC00MGRmLTlhOTgtZDQ0YmU2MTlmMGRkIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJST0xFX1BSQUNUSVRJT05FUiJdfSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiN2M1NTliMzMtYzVjZC00MGRmLTlhOTgtZDQ0YmU2MTlmMGRkIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5hbWUiOiJBbmRyZXkgSXZhbm92IiwicHJlZmVycmVkX3VzZXJuYW1lIjoiaXZhbm92YW5kcmV5IiwiZ2l2ZW5fbmFtZSI6IkFuZHJleSIsImZhbWlseV9uYW1lIjoiSXZhbm92IiwiZW1haWwiOiJpdmFub3ZAbWFpbC5jb20ifQ.wOrWw0pn0qZc2ao7pxwJrunz8tJ0AO6FTRfKk8uKBWpfarfqp4SF1uJaj45FExwFAl6RdpbA5YG6G8zn-iGTpcnyHsZ7wsSEHUaQyn9ln83svdvr0xXFsYdzRq0Upuh1HnXnUnIQW6Kc4c9uKUCs_CGhM4Z0ciE_5g1YAiOZ5pTgwCE62-sifpsIMh-6f4iDRoYtUjOzaGKTm6nxIPjCgeHM21qf6XzU00MsTi_X4yNI0HuCSnu3Hq-aAVgCct8cns-v5hIVUmSnoWmWw0rTdsXGQTUbJvrUem5q1c11y-gIsa9rt54oRwooCYmLzTesuCDrB2jJsbOu4NLD3i1OKA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/agsr/api/patients",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"agsr",
+						"api",
+						"patients"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "id",
+			"value": "1"
+		},
+		{
+			"key": "base_url",
+			"value": "https://postman-rest-api-learner.glitch.me/"
+		}
+	]
+}

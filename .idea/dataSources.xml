@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="postgres@localhost [2]" uuid="8d58a788-99af-4d98-8c54-d380df05d914">
+    <data-source source="LOCAL" name="keycloak@localhost" uuid="1ee7b0cd-eba2-4db2-937f-42783ff39711">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://localhost:5438/postgres</jdbc-url>
+      <jdbc-url>jdbc:postgresql://localhost:5432/keycloak</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

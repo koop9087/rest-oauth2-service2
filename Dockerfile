@@ -1,9 +1,21 @@
-# Use the OpenJDK 17 Alpine image as the base image
-FROM wodby/openjdk:17-alpine
+FROM gradle:8.0.2-jdk19 AS build
 
-# Add your Java application JAR file into the container
-ADD target/rest-oauth2-service-0.0.1-SNAPSHOT.jar app.jar
+WORKDIR /home/gradle/src
 
-# Add your bootstrap script into the container
+COPY build.gradle settings.gradle gradlew ./
 
-ENTRYPOINT ["java","-jar","app.jar"]
+COPY gradle ./gradle
+
+COPY src ./src
+
+RUN ./gradlew build -x test
+
+FROM openjdk:19-alpine
+
+WORKDIR /app
+
+COPY --from=build /home/gradle/src/build/libs/rest-oauth2-service-0.0.1-SNAPSHOT.jar app.jar
+
+EXPOSE 8080
+
+CMD ["java", "-jar", "./app.jar"]

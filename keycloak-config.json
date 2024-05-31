@@ -1,0 +1,99 @@
+{
+  "id": "agsr",
+  "realm": "agsr",
+  "enabled": true,
+  "clients": [
+    {
+      "clientId": "customsecurity",
+      "secret": "2Cn1N6P9I7r2a4dV6f8h0J3l5n7Q9r2t",
+      "enabled": true,
+      "redirectUris": ["http://localhost:8081/*"],
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "directAccessGrantsEnabled": true,
+      "standardFlowEnabled": true,
+      "serviceAccountsEnabled": true,
+      "authorizationServicesEnabled": true,
+      "webOrigins": ["*"],
+      "protocolMappers": [
+        {
+          "name": "realm-access",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-realm-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "multivalued": true,
+            "claim.name": "realm_access.roles",
+            "jsonType.label": "String",
+            "userinfo.token.claim": true,
+            "id.token.claim": true,
+            "access.token.claim": true
+          }
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "ivanovAndrey",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Andrey",
+      "lastName": "Ivanov",
+      "email": "ivanov@mail.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "ivanov"
+        }
+      ],
+      "realmRoles": ["ROLE_PRACTITIONER"]
+    },
+    {
+      "username": "petrovSemen",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Semen",
+      "lastName": "Petrov",
+      "email": "petrov@mail.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "petrov"
+        }
+      ],
+      "realmRoles": ["ROLE_PATIENT"]
+    },
+    {
+      "username": "sidorovIvan",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Ivan",
+      "lastName": "Sidorov",
+      "email": "sidorov@mail.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "sidorov"
+        }
+      ],
+      "realmRoles": ["ROLE_PATIENT", "ROLE_PRACTITIONER"]
+    }
+  ],
+  "roles": {
+    "realm": [
+      {
+        "name": "ROLE_PRACTITIONER",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "agsr"
+      },
+      {
+        "name": "ROLE_PATIENT",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "agsr"
+      }
+    ]
+  }
+}

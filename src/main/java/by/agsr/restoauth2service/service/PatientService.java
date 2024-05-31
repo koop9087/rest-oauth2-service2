@@ -1,17 +1,18 @@
 package by.agsr.restoauth2service.service;
 
-import by.agsr.restoauth2service.domain.dto.PatientDto;
-import org.springframework.stereotype.Service;
+import by.agsr.restoauth2service.model.Patient;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface PatientService {
-    void savePatient(PatientDto patientDto);
-/*
+    Optional<Patient> getPatientById(String id);
 
-    PatientDto getPatient(String id);
+    List<Patient> getAllPatients();
 
-    void updatePatient(PatientDto patientDto);
+    Patient savePatient(Patient patient);
 
-    void deletePatient(PatientDto patientDto);
-*/
+    Patient updatePatient(String id, Patient updatedPatient);
 
+    void deletePatient(String id);
 }
